@@ -125,13 +125,10 @@ float fencey = 0.0;
 bool movefencey = true;
 bool animfence = false;
 
-
-
 float santaX = 0.0;
 float santaY = 0.0;
 float santaZ = -3;
 float santaTheta = 0;
-
 
 float cubeunitlength = 1.5;
 
@@ -146,7 +143,6 @@ int hitgf3 = 0;
 int hitgf4 = 0;
 
 float liftgiftup = 0.0;
-
 
 float elfscale = 0.2;
 float elfangle = 0.0;
@@ -166,6 +162,7 @@ bool animtori = false;
 bool snowmanjump = false;
 float jumpsy = 0.0;
 bool snowmanup = true;
+float issad = 0.0;
 
 string timeString = "";
 
@@ -740,16 +737,17 @@ void drawSnowMan() {
 	glColor3f(0, 0, 0);
 	glTranslatef(0.0f, 0.5, 0.8f);
 	glutSolidSphere(0.1f, 20, 20);
-
 	glTranslatef(0.0f, -0.2, 0.1f);
 	glutSolidSphere(0.1f, 20, 20);
-
 	glTranslatef(0.0f, -0.2, 0.05f);
 	glutSolidSphere(0.1f, 20, 20);
 	glPopMatrix();
 
+	//hand
 
 	glPushMatrix();
+	glRotatef(issad, 1, 0, 0);
+
 	glPushMatrix();
 	glColor3f(0.6, 0.4, 0);
 	glTranslatef(1, 0.7, 0);
@@ -758,19 +756,12 @@ void drawSnowMan() {
 	glutSolidCube(0.1);
 	glPopMatrix();
 
-	//glPushMatrix();
-	//glTranslatef(1.0, 0.75, 0);
-	//glRotatef(35, 0, 0, 1);
-	//glutSolidCube(0.1);
-	//glPopMatrix();
-
 	glPushMatrix();
 	glTranslatef(-1, 0.7, 0);
 	glRotatef(-35, 0, 0, 1);
 	glScalef(5, 1, 1);
 	glutSolidCube(0.1);
 	glPopMatrix();
-
 	glPopMatrix();
 
 
@@ -778,8 +769,10 @@ void drawSnowMan() {
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	// Draw Head
+
 	glTranslatef(0.0f, 1.50f, 0.0f);
 	glutSolidSphere(0.70f, 20, 20);
+
 
 	glPushMatrix();
 	glTranslatef(0.0f, -0.47f, 0.0f);
@@ -787,6 +780,10 @@ void drawSnowMan() {
 	glRotatef(90, 1, 0, 0);
 	glutSolidTorus(0.35f, 0.4f, 30, 30);
 	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(issad,1,0,0);
+
 
 	// Draw Eyes
 	glPushMatrix();
@@ -798,14 +795,12 @@ void drawSnowMan() {
 	glPopMatrix();
 
 	// Draw Nose
-
 	glPushMatrix();
 	glTranslatef(0.0f, 0.0f, 0.7f);
 	glColor3f(1.0f, 0.5f, 0.5f);
 	glRotatef(0.0f, 1.0f, 0.0f, 0.0f);
 	glutSolidCone(0.1f, 0.6f, 10, 2);
 	glPopMatrix();
-
 
 	//Draw Hat
 	glPushMatrix();
@@ -817,10 +812,9 @@ void drawSnowMan() {
 	//brim
 	glTranslatef(0.0f, -0.1f, 0.4f);
 	gluDisk(pObj, 0.3f, 0.80f, 26, 13);
-
 	glPopMatrix();
 
-
+	glPopMatrix();
 	glPopMatrix();
 
 }
@@ -1337,8 +1331,6 @@ void Anim() {
 		 goup = true;
 	}
 
-
-
 	if (animtori) {
 		if (movetorix < 19)
 			movetorix += 0.07;
@@ -1350,8 +1342,6 @@ void Anim() {
 		}
 
 	}
-
-
 
 	if ((snowmanjump || gamewin) && !gameover) {
 
@@ -1383,9 +1373,6 @@ void Anim() {
 		snowmanup = true;
 	}
 
-
-
-
 	if (!int(gametime - timeElapsed)) {
 
 		//lift gifts up
@@ -1406,6 +1393,12 @@ void Anim() {
 		if (santaZ < -0.3) santaZ += 0.25;
 		if (santaZ > 0.3) santaZ -= 0.25;
 		santaTheta = 0;
+	}
+
+	if (gameover) {
+	
+		if (issad < 15) issad += 0.2;
+
 	}
 
 	glutPostRedisplay();
