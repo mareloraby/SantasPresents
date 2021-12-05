@@ -76,8 +76,8 @@ public:
 	}
 
 	void moveY(float d) {
-		 eye = eye + up.unit() * d;
-	
+		eye = eye + up.unit() * d;
+
 
 		//center = center + up.unit() * d;
 	}
@@ -146,7 +146,6 @@ float liftgiftup = 0.0;
 
 float elfscale = 0.2;
 float elfangle = 0.0;
-float elfmovex = 0.0;
 bool animgift = false;
 
 float rotyz = 10.0f;
@@ -185,10 +184,10 @@ namespace patch
 void drawSanta();
 
 void drawBitmapText(string text, float x, float y, float z)
-{	
+{
 	glDisable(GL_LIGHTING);
-	if(gameover || gametime - timeElapsed <= 10 ) glColor3f(1.0, 0, 0);
-	else if(gamewin) glColor3f(0, 1.0, 0);
+	if (gameover || gametime - timeElapsed <= 10) glColor3f(1.0, 0, 0);
+	else if (gamewin || gametime - timeElapsed <= 10 && gamewin) glColor3f(0, 1.0, 0);
 	else glColor3f(1.0, 1.0, 1.0);
 
 	glRasterPos3f(x, y, z);
@@ -326,8 +325,8 @@ void collisionhandling() {
 
 
 		}
-	
-	
+
+
 		if (hitgf1 && hitgf2 && hitgf3 && hitgf4) {
 
 			gamewin = true;
@@ -470,6 +469,8 @@ void drawSanta() {
 
 	glTranslatef(0.0f, 0.0f, -1.18f);
 	glutSolidTorus(0.19f, 0.8f, 50, 50);
+
+	glColor3f(0, 0, 0);
 
 	glTranslatef(0.0f, 0.0f, 0.65f);
 	glutSolidTorus(0.1f, 0.55f, 50, 50);
@@ -739,6 +740,48 @@ void drawSnowMan() {
 	glTranslatef(0.0f, 0.65f, 0.0f);
 	glutSolidSphere(1.0f, 20, 20);
 
+	//buttons
+	glPushMatrix();
+	glColor3f(0, 0, 0);
+	glTranslatef(0.0f, 0.5, 0.8f);
+	glutSolidSphere(0.1f, 20, 20);
+
+	glTranslatef(0.0f, -0.2, 0.1f);
+	glutSolidSphere(0.1f, 20, 20);
+
+	glTranslatef(0.0f, -0.2, 0.05f);
+	glutSolidSphere(0.1f, 20, 20);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glPushMatrix();
+	glColor3f(0.6, 0.4, 0);
+	glTranslatef(1, 0.7, 0);
+	glRotatef(35, 0, 0, 1);
+	glScalef(5, 1, 1);
+	glutSolidCube(0.1);
+	glPopMatrix();
+
+	//glPushMatrix();
+	//glTranslatef(1.0, 0.75, 0);
+	//glRotatef(35, 0, 0, 1);
+	//glutSolidCube(0.1);
+	//glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-1, 0.7, 0);
+	glRotatef(-35, 0, 0, 1);
+	glScalef(5, 1, 1);
+	glutSolidCube(0.1);
+	glPopMatrix();
+
+	glPopMatrix();
+
+
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
 	// Draw Head
 	glTranslatef(0.0f, 1.50f, 0.0f);
 	glutSolidSphere(0.70f, 20, 20);
@@ -865,7 +908,9 @@ void drawGift(Vector3f v) {
 
 void drawTorii() {
 
-	// 0.6 7  movetorix-9
+	// 	7.2 9 movetorix-9
+
+
 
 	GLUquadricObj* pObj = gluNewQuadric();
 	gluQuadricNormals(pObj, GLU_SMOOTH);
@@ -892,7 +937,6 @@ void drawTorii() {
 	glTranslatef(0, 5.5, -0);
 	glutSolidCube(0.5);
 	glPopMatrix();
-
 	glPushMatrix();
 	glTranslatef(0, 6, -0);
 	glScalef(10, 0.5, 0.5);
@@ -1021,72 +1065,48 @@ void Trees() {
 }
 
 void gifts() {
+
 	glPushMatrix();
 
 	if (!hitgf1) {
 		drawGift(gift1);
-
-		if (-elfmovex + gift1.x > -10) {
-			glPushMatrix();
-
-			glTranslatef(-elfmovex, liftgiftup, 0);
-			glTranslatef(gift1.x, gift1.y, gift1.z);
-			glRotatef(-elfangle, 0, 1, 0);
-			glScalef(elfscale, elfscale, elfscale);
-			drawElF();
-			glPopMatrix();
-		}
+		glPushMatrix();
+		glTranslatef(0, liftgiftup, 0);
+		glTranslatef(gift1.x, gift1.y, gift1.z);
+		glScalef(elfscale, elfscale, elfscale);
+		drawElF();
+		glPopMatrix();
 	}
 
 
 	if (!hitgf2) {
 		drawGift(gift2);
-
-		if (elfmovex + gift2.x < 10) {
-			glPushMatrix();
-			glTranslatef(elfmovex, liftgiftup, 0);
-
-			glTranslatef(gift2.x, gift2.y, gift2.z);
-			glRotatef(elfangle, 0, 1, 0);
-			glScalef(elfscale, elfscale, elfscale);
-			drawElF();
-			glPopMatrix();
-		}
+		glPushMatrix();
+		glTranslatef(0, liftgiftup, 0);
+		glTranslatef(gift2.x, gift2.y, gift2.z);
+		glScalef(elfscale, elfscale, elfscale);
+		drawElF();
+		glPopMatrix();
 	}
 
 	if (!hitgf3) {
 		drawGift(gift3);
-
-		if (elfmovex + gift3.x < 10) {
-
-			glPushMatrix();
-			glTranslatef(elfmovex, liftgiftup, 0);
-
-			glTranslatef(gift3.x, gift3.y, gift3.z);
-			glRotatef(elfangle, 0, 1, 0);
-			glScalef(elfscale, elfscale, elfscale);
-			drawElF();
-			glPopMatrix();
-		}
+		glPushMatrix();
+		glTranslatef(0, liftgiftup, 0);
+		glTranslatef(gift3.x, gift3.y, gift3.z);
+		glScalef(elfscale, elfscale, elfscale);
+		drawElF();
+		glPopMatrix();
 	}
+
 	if (!hitgf4) {
 		drawGift(gift4);
-
-		if (-elfmovex + gift4.x > -10) {
-
-			glPushMatrix();
-			glTranslatef(-elfmovex, liftgiftup, 0);
-
-			glTranslatef(gift4.x, gift4.y, gift4.z);
-			glRotatef(-elfangle, 0, 1, 0);
-			glScalef(elfscale, elfscale, elfscale);
-			drawElF();
-			glPopMatrix();
-		}
-		else 
-		{
-			animgift = false;
-		}
+		glPushMatrix();
+		glTranslatef(0, liftgiftup, 0);
+		glTranslatef(gift4.x, gift4.y, gift4.z);
+		glScalef(elfscale, elfscale, elfscale);
+		drawElF();
+		glPopMatrix();
 	}
 
 
@@ -1099,38 +1119,39 @@ void gifts() {
 
 float snowfall = 0.0;
 unsigned seed = time(0);
+bool playedmusicbox = false;
+bool godown = false;
+bool goup = true;
+
 
 void snow() {
 
 	srand(seed);
 
 	glDisable(GL_LIGHTING);
-	for (int i = 0; i <= 450; i++) {
+	for (int i = 1; i <= 460; i++) {
 
-			glPushMatrix();
-			float randsign = rand() % 2;
-			float randx = (randsign ? -1 : 1) * ((float(rand()) / float(RAND_MAX)) * 10);
-			float randy =  rand() % 300;
+		glPushMatrix();
+		float randsign = rand() % 2;
+		float randx = (randsign ? -1 : 1) * ((float(rand()) / float(RAND_MAX)) * 10);
+		float randy = rand() % 300;
 
-			randsign = rand() % 2;
-			float randz = (randsign ? -1 : 1) * ( ( float(rand()) / float(RAND_MAX) ) * 10 );
-			
-			if (randy - snowfall > -0.01 ) {
+		randsign = rand() % 2;
+		float randz = (randsign ? -1 : 1) * ((float(rand()) / float(RAND_MAX)) * 9);
 
-				glTranslatef(randx, randy - snowfall, randz);
+		if (randy - snowfall > -0.01) {
 
-			}
-			else {
-				glScalef(1, 0.5, 1);
+			glTranslatef(randx, randy - snowfall, randz);
 
-			/*	if (randz > movetorix - 9 + 5 && randz < movetorix - 9 - 5 && randx > -1.6 && randx < 1.6) {
-					glTranslatef(randx, 6.97, randz);
-				}*/
-				 glTranslatef(randx, -0.01, randz);
-			}
-			glColor3f(1, 1, 1);
-			glutSolidSphere(0.2, 25, 25);
-			glPopMatrix();
+		}
+		else {
+			glScalef(1, 0.5, 1);
+
+			glTranslatef(randx, -0.01, randz);
+		}
+		glColor3f(1, 1, 1);
+		glutSolidSphere(0.1, 25, 25);
+		glPopMatrix();
 
 	}
 	glEnable(GL_LIGHTING);
@@ -1204,6 +1225,7 @@ void Keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'z':
 		treeRotate = !treeRotate;
+		//playedmusicbox = !playedmusicbox;
 		//cout << treeRotate << endl;
 		break;
 
@@ -1230,11 +1252,13 @@ void Keyboard(unsigned char key, int x, int y) {
 void Timer(int value) {
 
 	timeElapsed += 60 / 1000.0;
-//	cout << timeElapsed << endl;
+	//	cout << timeElapsed << endl;
 	glutTimerFunc(60, Timer, 0);
 	glutPostRedisplay();
 }
+
 void Anim() {
+
 	fenceG += dcolor;
 	fenceB += dcolor;
 
@@ -1245,28 +1269,46 @@ void Anim() {
 		dcolor = -dcolor;
 	}
 
-
+	//tree
 	if (treeRotate) {
+
+		if (!playedmusicbox) {
+			PlaySound(TEXT("audio/musicbox2.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+			playedmusicbox = true;
+		}
+
 		if (treeTheta == 360) treeTheta = 0;
-		treeTheta += 0.1;
+		treeTheta += 0.2;
+
 	}
 
+	//elves
+	if (animgift && !gamewin) {
+		
+		if (goup) {
+			if (elfscale < 1.08) elfscale += 0.01;
+			else {
+				goup = false;
 
-	bool startmoving = false;
-	if (animgift) {
-		if (elfscale <= 1.01) elfscale += 0.01;
-		else {
-			startmoving = true;
+				godown = true;
+			}
 		}
-		if (startmoving) {
-			elfangle = 90;
-			elfmovex += 0.08;
+
+
+		if (godown) {
+			if (elfscale > 0.1) elfscale -= 0.01;
+			else {
+				goup = true;
+				godown = false;
+			}
 		}
 	}
 	else {
 		elfscale = 0.2;
-		elfmovex = 0;
+		 godown = false;
+		 goup = true;
 	}
+
 
 
 
@@ -1284,8 +1326,7 @@ void Anim() {
 
 
 
-	if (snowmanjump) {
-
+	if ((snowmanjump || gamewin) && !gameover) {
 
 		if (snowmanup) {
 			if (jumpsy < 1)
@@ -1293,22 +1334,24 @@ void Anim() {
 				jumpsy += 0.05;
 			}
 			else {
+				PlaySound(TEXT("audio/snowball.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
 				snowmanup = false;
 			}
 		}
 		else {
 
 
-			if (jumpsy > 0) {
+			if (jumpsy > -0.2) {
 				jumpsy += -0.06;
 			}
 			else {
 				snowmanup = true;
+
 			}
 		}
 	}
 	else {
-	
+
 		jumpsy = 0.0;
 		snowmanup = true;
 	}
@@ -1319,25 +1362,35 @@ void Anim() {
 	if (!int(gametime - timeElapsed)) {
 
 		//lift gifts up
-
 		gameend = true;
-		if(!gamewin) gameover = true;
+		if (!gamewin) gameover = true;
 		liftgiftup += 0.1;
 	}
 
 	snowfall += 0.1;
 
-
+	if (gamewin) {
+		if (santaX < -0.3) {
+			santaX += 0.25;
+		}
+		else if (santaX > 0.3) {
+			santaX -= 0.25;
+		}
+		if (santaZ < -0.3) santaZ += 0.25;
+		if (santaZ > 0.3) santaZ -= 0.25;
+		santaTheta = 0;
+	}
 
 	glutPostRedisplay();
 
 }
+
 void renderScene(void) {
+
 
 	// Clear Color and Depth Buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.1, 0.1, 0.2, 0.0f);
-
 
 	//2D Text
 	glMatrixMode(GL_PROJECTION);
@@ -1361,7 +1414,7 @@ void renderScene(void) {
 		}
 	}
 	else {
-	
+
 		drawBitmapText(timeString, 5, 10, 0);
 	}
 
@@ -1372,10 +1425,6 @@ void renderScene(void) {
 
 
 	setupCamera();
-
-
-	glPushMatrix();
-	glPopMatrix();
 
 	glPushMatrix();
 	drawScene();
@@ -1412,7 +1461,7 @@ void renderScene(void) {
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, 0, movetorix-9);
+	glTranslatef(0, 0, movetorix - 9);
 
 	glScalef(1.2, 1.2, 1.2);
 	drawTorii();
