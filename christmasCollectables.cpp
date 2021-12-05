@@ -1384,6 +1384,10 @@ void Anim() {
 	snowfall += 0.1;
 
 	if (gamewin) {
+		camera.eye.x = 0.0f;
+		camera.eye.y = 3.0f;
+		camera.eye.z = 30.0f;
+
 		if (santaX < -0.3) {
 			santaX += 0.25;
 		}
