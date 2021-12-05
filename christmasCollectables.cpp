@@ -121,6 +121,10 @@ float fenceR = 0.6;
 float fenceG = 0.6;
 float fenceB = 0.6;
 float dcolor = -0.0005;
+float fencey = 0.0;
+bool movefencey = true;
+bool animfence = false;
+
 
 
 float santaX = 0.0;
@@ -147,11 +151,14 @@ float liftgiftup = 0.0;
 float elfscale = 0.2;
 float elfangle = 0.0;
 bool animgift = false;
+bool godown = false;
+bool goup = true;
 
 float rotyz = 10.0f;
 
 float treeTheta = 0.0;
 bool treeRotate = false;
+bool playedmusicbox = false;
 
 float movetorix = 0;
 bool animtori = false;
@@ -166,6 +173,12 @@ float gametime = 61;
 bool gameend = false;
 bool gamewin = false;
 bool gameover = false;
+
+
+float snowfall = 0.0;
+unsigned seed = time(0);
+
+
 
 
 
@@ -205,12 +218,12 @@ void defaultMaterial() {
 	GLfloat mat_specular[] = { 0.5f, 0.5f, 0.6f, 1.0f };
 	GLfloat mat_diffuse[] = { 0.0, 0.0, 0.0, 1.0 };
 	GLfloat mat_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-	GLfloat mat_shininess = { 40.0f };
+	
 	/* define material properties for front face of all polygons */
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess);
+	glMaterialf(GL_FRONT, GL_SHININESS, 20);
 
 
 	glEnable(GL_COLOR_MATERIAL);
@@ -218,22 +231,6 @@ void defaultMaterial() {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 
-}
-
-void goldMaterial() {
-
-	glDisable(GL_COLOR_MATERIAL);
-
-	GLfloat mat_specular[]{ 0.797357, 0.723991, 0.208006, 1.0 };
-	GLfloat mat_diffuse[]{ 0.34615, 0.3143, 0.0903, 1.0 };
-	GLfloat mat_ambient[]{ 0.24725, 0.2245, 0.0645, 1.0 };
-	GLfloat mat_shininess = 83.2;
-
-	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
-	glMaterialf(GL_FRONT, GL_SHININESS, mat_shininess * 128);
-	glDisable(GL_COLOR_MATERIAL);
 }
 
 void enablelighting() {
@@ -245,9 +242,9 @@ void enablelighting() {
 	defaultMaterial();
 
 	/* Control lighting properties */
-	//GLfloat light_ambient[] = { .5, .0, .0, 1.0 };
+	GLfloat light_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	GLfloat light_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-	//GLfloat light_specular[] = { .7, .0, .0, 1.0 };
+	GLfloat light_specular[] = { 0.3, .3, .3, 1.0 };
 	GLfloat light_position[] = { -2.31f, 0.10, 1.42f, 0.0f };
 
 	/* set up ambient, diffuse, and specular components for light 0 */
@@ -666,9 +663,7 @@ void drawTree() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glColor3f(0, 0, 0);
-
-	goldMaterial();
+	glColor3f(0.5, 0.5, 0);
 
 	glPushMatrix();
 	glTranslatef(0.0f, 5.8f, 1.3);
@@ -843,6 +838,22 @@ void drawGift(Vector3f v) {
 	glutSolidCube(cubeunitlength);
 	glPopMatrix();
 
+
+
+	glPushMatrix();
+	glColor3f(0.1f, 0.7f, 0.4f);
+	glTranslatef(-0.1, 1.5, 0.0f);
+	glRotatef(-35,1,0,0);
+	glutSolidSphere( 0.15, 25, 25);
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(0.1f, 0.7f, 0.4f);
+	glTranslatef(0.1, 1.5, 0.0f);
+	glRotatef(-35, 1, 0, 0);
+	glutSolidSphere(0.15, 25, 25);
+	glPopMatrix();
+
+	
 	glPushMatrix();
 
 	glBegin(GL_QUADS);
@@ -908,8 +919,6 @@ void drawGift(Vector3f v) {
 
 void drawTorii() {
 
-	// 	7.2 9 movetorix-9
-
 
 
 	GLUquadricObj* pObj = gluNewQuadric();
@@ -923,6 +932,7 @@ void drawTorii() {
 	glTranslatef(-3, 3, -0);
 	glScalef(0.5, 6, 0.5);
 	glutSolidCube(1);
+
 	glTranslatef(12, 0, 0);
 	glutSolidCube(1);
 	glPopMatrix();
@@ -982,8 +992,9 @@ void drawTorii() {
 }
 
 void drawFence() {
-	glColor3f(fenceR, fenceG, fenceB);
 
+	glPushMatrix();
+	glColor3f(fenceR, fenceG, fenceB);
 	glDisable(GL_LIGHTING);
 	glTranslatef(0, 0.9f, 0);
 	glScalef(0.8, 1.8, 0.2);
@@ -992,6 +1003,7 @@ void drawFence() {
 	glutSolidCube(1);
 	glEnable(GL_LIGHTING);
 
+	glPopMatrix();
 
 }
 
@@ -1007,13 +1019,16 @@ void drawScene() {
 	glVertex3f(groundLen, 0.0f, groundLen);
 	glVertex3f(groundLen, 0.0f, -groundLen);
 	glEnd();
-	glEnable(GL_LIGHTING);
 
 	//DrawFence
 	for (float i = -9.8f; i <= 10.0f; (i = i + 1.6)) {
+		
 		glPushMatrix();
+
 		glTranslatef(i, -0.01f, -10.0f);
 		drawFence();
+
+
 		glPopMatrix();
 	}
 
@@ -1023,6 +1038,8 @@ void drawScene() {
 
 		glTranslatef(-10.0f, -0.01f, i);
 		glRotatef(90, 0, 1, 0);
+		glRotatef(fencey, 1, 0, 0);
+
 		drawFence();
 		glPopMatrix();
 	}
@@ -1032,9 +1049,12 @@ void drawScene() {
 		glPushMatrix();
 		glTranslatef(10.0f, -0.01f, i);
 		glRotatef(90, 0, 1, 0);
+		glRotatef(-fencey, 1, 0, 0);
+
 		drawFence();
 		glPopMatrix();
 	}
+	glEnable(GL_LIGHTING);
 
 }
 
@@ -1115,14 +1135,6 @@ void gifts() {
 
 
 }
-
-
-float snowfall = 0.0;
-unsigned seed = time(0);
-bool playedmusicbox = false;
-bool godown = false;
-bool goup = true;
-
 
 void snow() {
 
@@ -1225,8 +1237,9 @@ void Keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'z':
 		treeRotate = !treeRotate;
-		//playedmusicbox = !playedmusicbox;
-		//cout << treeRotate << endl;
+		if (!treeRotate) {
+			playedmusicbox = false;
+		}
 		break;
 
 	case 'x':
@@ -1241,6 +1254,9 @@ void Keyboard(unsigned char key, int x, int y) {
 		snowmanjump = !snowmanjump;
 		break;
 
+	case 'c':
+		animfence = !animfence;
+		break;
 
 	case GLUT_KEY_ESCAPE:
 		exit(EXIT_SUCCESS);
@@ -1269,10 +1285,22 @@ void Anim() {
 		dcolor = -dcolor;
 	}
 
+	if (animfence) {
+		if (movefencey) {
+			if (fencey < 10) fencey+= 0.3;
+			else movefencey = false;
+		}
+		else {
+			if (fencey > -10) fencey -= 0.3;
+			else movefencey = true;
+		}
+	}
+
 	//tree
 	if (treeRotate) {
 
 		if (!playedmusicbox) {
+		
 			PlaySound(TEXT("audio/musicbox2.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
 			playedmusicbox = true;
 		}
@@ -1283,7 +1311,7 @@ void Anim() {
 	}
 
 	//elves
-	if (animgift && !gamewin) {
+	if (animgift && !gamewin &&!gameover) {
 		
 		if (goup) {
 			if (elfscale < 1.08) elfscale += 0.01;
@@ -1308,7 +1336,6 @@ void Anim() {
 		 godown = false;
 		 goup = true;
 	}
-
 
 
 
