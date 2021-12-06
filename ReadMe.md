@@ -1,23 +1,40 @@
 
 
-This file contains a summary of what you will find in each of the files that
-make up your OpenGL3DTemplate application.
+# Santa's Presents
+
+A 3D game implemented using OpenGL3D library in c++.
+
+The game scene has different 3D objects and a character collecting some presents. The goal is to collect the presents before
+the time ends. 
+
+#### The player can translate through the whole scene using the ```arrow keys```, and move the camera freely using ```WASD```.
+
+#### The camera views can be changed from one view to another using the keys:
+```
+'t' : Top view.
+
+'f' : Front view.
+
+'h' : Side view.
+```
+
+
+#### Each object in the scene has an animation that is toggled by a key.
+
+```
+'z' : toggle tree rotation.
+
+'x' : toggle gift and elves animation.
+
+'c' : toggle fence rotation.
+
+'v' : toggle Torii Gate translation.
+
+'b' : Toggle snowman bounce.
+```
+
+# Files Summary
 
 christmasCollectable.cpp
     This is the main application source file.
     
-OpenGL3DTemplate.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-OpenGL3DTemplate.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
-
-
-/////////////////////////////////////////////////////////////////////////////
