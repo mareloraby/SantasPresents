@@ -166,7 +166,7 @@ float issad = 0.0;
 
 string timeString = "";
 
-float gametime = 11;
+float gametime = 61;
 bool gameend = false;
 bool gamewin = false;
 bool gameover = false;
