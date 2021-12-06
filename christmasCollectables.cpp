@@ -176,9 +176,6 @@ float snowfall = 0.0;
 unsigned seed = time(0);
 
 
-
-
-
 // http://stackoverflow.com/questions/12975341/to-string-is-not-a-member-of-std-says-so-g
 namespace patch
 {
@@ -189,7 +186,6 @@ namespace patch
 		return stm.str();
 	}
 }
-
 
 void drawSanta();
 
@@ -215,7 +211,7 @@ void defaultMaterial() {
 	GLfloat mat_specular[] = { 0.5f, 0.5f, 0.6f, 1.0f };
 	GLfloat mat_diffuse[] = { 0.0, 0.0, 0.0, 1.0 };
 	GLfloat mat_ambient[] = { 0.0, 0.0, 0.0, 1.0 };
-	
+
 	/* define material properties for front face of all polygons */
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
@@ -782,7 +778,7 @@ void drawSnowMan() {
 	glPopMatrix();
 
 	glPushMatrix();
-	glRotatef(issad,1,0,0);
+	glRotatef(issad, 1, 0, 0);
 
 
 	// Draw Eyes
@@ -837,8 +833,8 @@ void drawGift(Vector3f v) {
 	glPushMatrix();
 	glColor3f(0.1f, 0.7f, 0.4f);
 	glTranslatef(-0.1, 1.5, 0.0f);
-	glRotatef(-35,1,0,0);
-	glutSolidSphere( 0.15, 25, 25);
+	glRotatef(-35, 1, 0, 0);
+	glutSolidSphere(0.15, 25, 25);
 	glPopMatrix();
 	glPushMatrix();
 	glColor3f(0.1f, 0.7f, 0.4f);
@@ -847,7 +843,7 @@ void drawGift(Vector3f v) {
 	glutSolidSphere(0.15, 25, 25);
 	glPopMatrix();
 
-	
+
 	glPushMatrix();
 
 	glBegin(GL_QUADS);
@@ -1016,7 +1012,7 @@ void drawScene() {
 
 	//DrawFence
 	for (float i = -9.8f; i <= 10.0f; (i = i + 1.6)) {
-		
+
 		glPushMatrix();
 
 		glTranslatef(i, -0.01f, -10.0f);
@@ -1281,7 +1277,7 @@ void Anim() {
 
 	if (animfence) {
 		if (movefencey) {
-			if (fencey < 10) fencey+= 0.3;
+			if (fencey < 10) fencey += 0.3;
 			else movefencey = false;
 		}
 		else {
@@ -1294,7 +1290,7 @@ void Anim() {
 	if (treeRotate) {
 
 		if (!playedmusicbox) {
-		
+
 			PlaySound(TEXT("audio/musicbox2.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
 			playedmusicbox = true;
 		}
@@ -1305,8 +1301,8 @@ void Anim() {
 	}
 
 	//elves
-	if (animgift && !gamewin &&!gameover) {
-		
+	if (animgift && !gamewin && !gameover) {
+
 		if (goup) {
 			if (elfscale < 1.08) elfscale += 0.01;
 			else {
@@ -1327,8 +1323,8 @@ void Anim() {
 	}
 	else {
 		elfscale = 0.2;
-		 godown = false;
-		 goup = true;
+		godown = false;
+		goup = true;
 	}
 
 	if (animtori) {
@@ -1378,7 +1374,7 @@ void Anim() {
 		//lift gifts up
 		gameend = true;
 		if (!gamewin) {
-			gameover = true; 
+			gameover = true;
 
 		}
 		if (!playdgameover) {
