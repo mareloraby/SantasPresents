@@ -166,7 +166,7 @@ float issad = 0.0;
 
 string timeString = "";
 
-float gametime = 61;
+float gametime = 11;
 bool gameend = false;
 bool gamewin = false;
 bool gameover = false;
@@ -1266,7 +1266,7 @@ void Timer(int value) {
 	glutTimerFunc(60, Timer, 0);
 	glutPostRedisplay();
 }
-
+bool playdgameover = false;
 void Anim() {
 
 	fenceG += dcolor;
@@ -1377,8 +1377,16 @@ void Anim() {
 
 		//lift gifts up
 		gameend = true;
-		if (!gamewin) gameover = true;
+		if (!gamewin) {
+			gameover = true; 
+
+		}
+		if (!playdgameover) {
+			PlaySound(TEXT("audio/gameover.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NODEFAULT);
+			playdgameover = true;
+		}
 		liftgiftup += 0.1;
+		if (issad < 15) issad += 0.2;
 	}
 
 	snowfall += 0.1;
@@ -1397,12 +1405,6 @@ void Anim() {
 		if (santaZ < -0.3) santaZ += 0.25;
 		if (santaZ > 0.3) santaZ -= 0.25;
 		santaTheta = 0;
-	}
-
-	if (gameover) {
-	
-		if (issad < 15) issad += 0.2;
-
 	}
 
 	glutPostRedisplay();
