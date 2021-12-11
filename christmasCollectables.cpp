@@ -1422,7 +1422,6 @@ void renderScene(void) {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
-	glRasterPos2i(10, 10);
 	timeString = "Time left : " + to_string(int(gametime - timeElapsed)) + " s";
 	string overstg = "Game Over";
 
